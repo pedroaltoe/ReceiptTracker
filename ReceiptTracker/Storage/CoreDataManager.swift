@@ -25,4 +25,9 @@ final class CoreDataManager {
             try? context.save()
         }
     }
+
+    func delete(_ object: NSManagedObject) {
+        context.delete(object)
+        saveContext()
+    }
 }
