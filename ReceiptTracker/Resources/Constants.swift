@@ -19,3 +19,9 @@ enum CoreData {
     static let containerName: String = "ReceiptDataModel"
 }
 
+enum Receipts {
+    enum Image {
+        static let size: CGFloat = 60
+        static let cornerRadius: CGFloat = 8
+    }
+}
