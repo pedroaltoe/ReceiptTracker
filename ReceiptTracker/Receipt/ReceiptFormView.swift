@@ -33,10 +33,12 @@ struct ReceiptFormView: View {
 
     @ViewBuilder var imagePicker: some View {
         Section(header: Text(Localized.ReceiptForm.photoSectionTitle)) {
-            Image(uiImage: viewModel.displayModel.image)
-                .resizable()
-                .scaledToFit()
-                .cornerRadius(ReceiptForm.Image.cornerRadius)
+            if viewModel.displayModel.image.size.width > 0 {
+                Image(uiImage: viewModel.displayModel.image)
+                    .resizable()
+                    .scaledToFit()
+                    .cornerRadius(ReceiptForm.Image.cornerRadius)
+            }
 
             PhotosPicker(
                 Localized.ReceiptForm.photosPickerButtonTitle,
