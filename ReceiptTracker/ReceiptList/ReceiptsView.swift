@@ -37,32 +37,7 @@ struct ReceiptsView: View {
     @ViewBuilder func contentView(_ receipts: [Receipt]) -> some View {
         List {
             ForEach(receipts) { receipt in
-                HStack {
-                    if let uiImage = viewModel.getImage(from: receipt.imageData) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: Receipts.Image.size, height: Receipts.Image.size)
-                            .cornerRadius(Receipts.Image.cornerRadius)
-                            .accessibilityLabel(A11y.Receipts.receiptImage)
-                            .accessibilityIdentifier("Receipt image")
-                    }
-
-                    VStack(alignment: .leading) {
-                        Text("\(receipt.amount, specifier: "%.2f") \(receipt.currency ?? "")")
-                            .accessibilityLabel(A11y.Receipts.receiptAmount("\(receipt.amount)"))
-                            .accessibilityIdentifier("Receipt amount")
-
-                        if let date = receipt.date {
-                            Text(date, style: .date)
-                                .font(.caption)
-                                .foregroundColor(.secondary)
-                                .accessibilityLabel(A11y.Receipts.receiptDate(viewModel.convertDateToString(date)))
-                                .accessibilityIdentifier("Receipt date")
-                        }
-                    }
-                }
-                .onTapGesture { viewModel.openReceipt(receipt) }
+                receiptRow(receipt)
             }
             .onDelete(perform: viewModel.removeReceipt)
         }
@@ -83,6 +58,39 @@ struct ReceiptsView: View {
         }
         .accessibilityLabel(A11y.Receipts.receiptList)
         .accessibilityIdentifier("Receipt list")
+    }
+
+    // MARK: Row
+
+    @ViewBuilder private func receiptRow(_ receipt: Receipt) -> some View {
+        HStack {
+            if let uiImage = viewModel.getImage(from: receipt.imageData) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: Receipts.Image.size, height: Receipts.Image.size)
+                    .cornerRadius(Receipts.Image.cornerRadius)
+                    .accessibilityLabel(A11y.Receipts.receiptImage)
+                    .accessibilityIdentifier("Receipt image")
+            }
+
+            VStack(alignment: .leading) {
+                Text("\(receipt.amount, specifier: "%.2f") \(receipt.currency ?? "")")
+                    .accessibilityLabel(A11y.Receipts.receiptAmount("\(receipt.amount)"))
+                    .accessibilityIdentifier("Receipt amount")
+
+                if let date = receipt.date {
+                    Text(date, style: .date)
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .accessibilityLabel(A11y.Receipts.receiptDate(viewModel.convertDateToString(date)))
+                        .accessibilityIdentifier("Receipt date")
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(Rectangle())
+        .onTapGesture { viewModel.openReceipt(receipt) }
     }
 
     // MARK: Error
