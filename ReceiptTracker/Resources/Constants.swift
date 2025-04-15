@@ -6,6 +6,7 @@ enum Space {
     static let large: CGFloat = 12
     static let extraLarge: CGFloat = 16
     static let extraExtraLarge: CGFloat = 20
+    static let extraExtraExtraLarge: CGFloat = 32
 }
 
 enum Size {
@@ -23,5 +24,11 @@ enum Receipts {
     enum Image {
         static let size: CGFloat = 60
         static let cornerRadius: CGFloat = 8
+    }
+}
+
+enum ReceiptForm {
+    enum Image {
+        static let cornerRadius: CGFloat = 12
     }
 }
