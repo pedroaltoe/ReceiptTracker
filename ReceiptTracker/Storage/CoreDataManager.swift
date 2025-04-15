@@ -20,14 +20,21 @@ final class CoreDataManager {
         container.viewContext
     }
 
-    func saveContext() {
+    func fetchData() throws -> [Receipt] {
+        let request: NSFetchRequest<Receipt> = Receipt.fetchRequest()
+        request.sortDescriptors = [NSSortDescriptor(keyPath: \Receipt.date, ascending: false)]
+
+        return try context.fetch(request)
+    }
+
+    func saveContext() throws {
         if context.hasChanges {
-            try? context.save()
+            try context.save()
         }
     }
 
-    func delete(_ object: NSManagedObject) {
+    func delete(_ object: NSManagedObject) throws {
         context.delete(object)
-        saveContext()
+        try saveContext()
     }
 }
