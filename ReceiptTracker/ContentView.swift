@@ -1,21 +1,17 @@
-//
-//  ContentView.swift
-//  ReceiptTracker
-//
-//  Created by Pedro Altoe Costa on 10/4/2025.
-//
-
 import SwiftUI
 
 struct ContentView: View {
+
+    @State private var coordinator = Coordinator()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack(path: $coordinator.path) {
+            coordinator.build(screen: .receiptsView)
+            .navigationDestination(for: Route.self) { screen in
+                coordinator.build(screen: screen)
+            }
+            .navigationTitle(Localized.Receipts.title)
         }
-        .padding()
     }
 }
 
