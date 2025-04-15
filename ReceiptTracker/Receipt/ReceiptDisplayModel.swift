@@ -1,13 +1,13 @@
 import SwiftUI
 
 struct ReceiptDisplayModel {
-    var amount: Double
+    var amount: String
     var currency: String
     var date: Date
     var image: UIImage
 
     init(
-        amount: Double = 0,
+        amount: String = "",
         currency: String = "",
         date: Date = Date(),
         image: UIImage = UIImage()

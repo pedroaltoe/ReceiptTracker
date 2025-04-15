@@ -21,9 +21,10 @@ final class ReceiptFormViewModel {
     }
 
     var isFormValid: Bool {
+        let doubleAmount = convertStringAmountToDouble()
         guard
             displayModel.image.size.width > 0,
-            displayModel.amount > 0,
+            doubleAmount > 0,
             !displayModel.currency.isEmpty
         else { return false }
         return true
@@ -69,7 +70,7 @@ final class ReceiptFormViewModel {
         }
 
         tempReceipt?.date = displayModel.date
-        tempReceipt?.amount = displayModel.amount
+        tempReceipt?.amount = convertStringAmountToDouble()
         tempReceipt?.currency = displayModel.currency
         tempReceipt?.imageData = displayModel.image.jpegData(compressionQuality: 0.8)
 
@@ -85,11 +86,54 @@ final class ReceiptFormViewModel {
     private func makeDisplayModel() {
         guard let receipt else { return }
         displayModel = ReceiptDisplayModel(
-            amount: receipt.amount,
+            amount: String(receipt.amount),
             currency: receipt.currency ?? "",
             date: receipt.date ?? Date(),
             image: UIImage(data: receipt.imageData ?? Data()) ?? UIImage()
         )
+    }
+
+    func formatAmountString(_ input: String) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.minimumFractionDigits = 0
+        formatter.maximumFractionDigits = 2
+
+        guard
+            let number = Double(input),
+            let formatted = formatter.string(from: NSNumber(value: number))
+        else { return input }
+
+        return formatted
+    }
+
+    func validateAmount(_ newValue: String) {
+        let filtered = newValue.filter { "0123456789.,".contains($0) }
+        let dots = filtered.filter { $0 == "." }
+        let commas = filtered.filter { $0 == "," }
+
+        if
+            dots.count <= 1,
+            commas.count <= 1
+        {
+            displayModel.amount = filtered
+        } else {
+            displayModel.amount = String(filtered.dropLast())
+        }
+    }
+
+    private func convertStringAmountToDouble() -> Double {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale.current
+
+        let normalizedString = displayModel.amount.replacingOccurrences(of: ",", with: ".")
+
+        guard let number = formatter.number(from: displayModel.amount) else {
+            return Double(normalizedString) ?? 0
+        }
+
+        return number.doubleValue
     }
 }
 

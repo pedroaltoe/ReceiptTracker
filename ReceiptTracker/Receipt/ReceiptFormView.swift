@@ -70,10 +70,12 @@ struct ReceiptFormView: View {
         Section(header: Text(Localized.ReceiptForm.amountSectionTitle)) {
             TextField(
                 Localized.ReceiptForm.amountPlaceholder,
-                value: $viewModel.displayModel.amount,
-                format: .number
+                text: $viewModel.displayModel.amount
             )
             .keyboardType(.decimalPad)
+            .onChange(of: viewModel.displayModel.amount) { _, newValue in
+                viewModel.validateAmount(newValue)
+            }
         }
         .accessibilityLabel(A11y.ReceiptForm.amountField)
         .accessibilityIdentifier("Amount field")
