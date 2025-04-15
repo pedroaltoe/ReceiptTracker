@@ -6,6 +6,13 @@ import CoreData
 @MainActor
 final class ReceiptsViewModel {
 
+    enum AlertType: String, Identifiable {
+        case error
+
+        var id: String { rawValue }
+    }
+
+    var alertType: AlertType?
     var viewState: ReceiptsViewState
     var receipts: [Receipt] = []
 
@@ -16,10 +23,17 @@ final class ReceiptsViewModel {
         return dateFormatter
     }()
 
-    private let context = CoreDataManager.shared.context
+    private let repository: RepositoryProtocol
+    private let coordinator: Coordinator
 
-    init() {
+    init(
+        coordinator: Coordinator,
+        repository: RepositoryProtocol
+    ) {
         viewState = .idle
+        self.coordinator = coordinator
+        self.repository = repository
+
         fetchReceipts()
     }
 
@@ -27,11 +41,9 @@ final class ReceiptsViewModel {
 
     func fetchReceipts() {
         viewState = .loading
-        let request: NSFetchRequest<Receipt> = Receipt.fetchRequest()
-        request.sortDescriptors = [NSSortDescriptor(keyPath: \Receipt.date, ascending: false)]
 
         do {
-            receipts = try context.fetch(request)
+            receipts = try repository.fetchData()
             viewState = receipts.isEmpty ? .empty : .present(receipts)
         } catch {
             viewState = .error(error.localizedDescription)
@@ -41,11 +53,11 @@ final class ReceiptsViewModel {
     // MARK: Actions
 
     func addReceipt() {
-        print("Add receipt")
+        coordinator.navigate(to: .openReceiptView(nil))
     }
 
-    func openReceipt() {
-        print("Open receipt")
+    func openReceipt(_ receipt: Receipt) {
+        coordinator.navigate(to: .openReceiptView(receipt))
     }
 
     // MARK: Helpers
@@ -66,7 +78,11 @@ final class ReceiptsViewModel {
     func removeReceipt(at indexSet: IndexSet) {
         indexSet.forEach { index in
             let receipt = receipts[index]
-            CoreDataManager.shared.delete(receipt)
+            do {
+                try repository.delete(receipt)
+            } catch {
+                alertType = .error
+            }
         }
 
         fetchReceipts()
