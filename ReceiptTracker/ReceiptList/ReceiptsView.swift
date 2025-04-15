@@ -3,25 +3,22 @@ import PhotosUI
 
 struct ReceiptsView: View {
     
-    @State var viewModel = ReceiptsViewModel()
+    @Bindable var viewModel: ReceiptsViewModel
 
     var body: some View {
-        NavigationView {
-            switch viewModel.viewState {
-            case .idle:
-                Color.clear
-                    .onAppear {
-                        viewModel.fetchReceipts()
-                    }
-            case .loading:
-                progressView
-            case let .present(receipts):
-                contentView(receipts)
-            case let .error(error):
-                errorView(error)
-            case .empty:
-                emptyView()
-            }
+        switch viewModel.viewState {
+        case .idle:
+            Color.clear
+                .onAppear { viewModel.fetchReceipts() }
+        case .loading:
+            progressView
+        case let .present(receipts):
+            contentView(receipts)
+                .refreshable { viewModel.fetchReceipts() }
+        case let .error(error):
+            errorView(error)
+        case .empty:
+            emptyView()
         }
     }
 
@@ -65,10 +62,10 @@ struct ReceiptsView: View {
                         }
                     }
                 }
+                .onTapGesture { viewModel.openReceipt(receipt) }
             }
             .onDelete(perform: viewModel.removeReceipt)
         }
-        .navigationTitle(Localized.Receipts.title)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(Localized.Receipts.add, systemImage: "plus") {
@@ -76,6 +73,12 @@ struct ReceiptsView: View {
                 }
                 .accessibilityLabel(A11y.Receipts.addButton)
                 .accessibilityIdentifier("Add button")
+            }
+        }
+        .alert(item: $viewModel.alertType) {
+            switch $0 {
+            case .error:
+                return makeErrorAlert()
             }
         }
         .accessibilityLabel(A11y.Receipts.receiptList)
@@ -99,6 +102,10 @@ struct ReceiptsView: View {
             .accessibilityLabel(A11y.Receipts.refreshButton)
             .accessibilityIdentifier("Refresh button")
         }
+    }
+
+    private func makeErrorAlert() -> Alert {
+        Alert(title: Text(Localized.Receipts.deleteItemErrorMessage))
     }
 
     // MARK: Empty
