@@ -27,6 +27,7 @@
 		375F55B62DA7EC7E0021A52D /* ReceiptTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReceiptTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		375F55C62DA7EC800021A52D /* ReceiptTrackerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReceiptTrackerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		375F55D02DA7EC800021A52D /* ReceiptTrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ReceiptTrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		375F56212DAFDE1A0021A52D /* ReceiptTracker.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; name = ReceiptTracker.xctestplan; path = ../ReceiptTracker.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -75,6 +76,7 @@
 		375F55AD2DA7EC7E0021A52D = {
 			isa = PBXGroup;
 			children = (
+				375F56212DAFDE1A0021A52D /* ReceiptTracker.xctestplan */,
 				375F55B82DA7EC7E0021A52D /* ReceiptTracker */,
 				375F55C92DA7EC800021A52D /* ReceiptTrackerTests */,
 				375F55D32DA7EC800021A52D /* ReceiptTrackerUITests */,
