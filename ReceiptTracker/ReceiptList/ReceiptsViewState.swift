@@ -1,6 +1,6 @@
 import Foundation
 
-enum ReceiptsViewState {
+enum ReceiptsViewState: Equatable {
     case idle
     case loading
     case present([Receipt])
