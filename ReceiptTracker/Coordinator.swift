@@ -8,7 +8,7 @@ enum Route: Hashable {
 }
 
 @Observable
-final class Coordinator {
+class Coordinator {
 
     var path = NavigationPath()
 
@@ -47,3 +47,20 @@ final class Coordinator {
         }
     }
 }
+
+#if targetEnvironment(simulator)
+final class MockCoordinator: Coordinator {
+
+    var didNavigateBack = false
+
+    var lastRoute: Route?
+
+    override func navigate(to route: Route) {
+        lastRoute = route
+    }
+
+    override func goBack() {
+        didNavigateBack = true
+    }
+}
+#endif
