@@ -93,9 +93,10 @@ final class ReceiptFormViewModel {
         )
     }
 
-    func formatAmountString(_ input: String) -> String {
+    func formatAmountString(_ input: String, locale: Locale = .current) -> String {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
+        formatter.locale = locale
         formatter.minimumFractionDigits = 0
         formatter.maximumFractionDigits = 2
 
@@ -122,7 +123,7 @@ final class ReceiptFormViewModel {
         }
     }
 
-    private func convertStringAmountToDouble() -> Double {
+    func convertStringAmountToDouble() -> Double {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.locale = Locale.current
