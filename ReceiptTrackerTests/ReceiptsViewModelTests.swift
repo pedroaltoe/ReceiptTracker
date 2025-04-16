@@ -70,6 +70,43 @@ final class ReceiptsViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.alertType, .error)
     }
 
+    func test_addReceipt_navigatesToAdd() {
+        let mockRepository = MockRepository()
+        let mockCoordinator = MockCoordinator()
+
+        let viewModel = makeViewModel(
+            coordinator: mockCoordinator,
+            repository: mockRepository
+        )
+
+        viewModel.addReceipt()
+
+        guard case .openReceiptView(let receipt)? = mockCoordinator.lastRoute else {
+            return XCTFail("Expected navigation to .openReceiptView")
+        }
+
+        XCTAssertNil(receipt)
+    }
+
+    func test_openReceipt_navigatesToEdit() {
+        let mockRepository = MockRepository()
+        let mockCoordinator = MockCoordinator()
+        let receipt = makeReceipt()
+
+        let viewModel = makeViewModel(
+            coordinator: mockCoordinator,
+            repository: mockRepository
+        )
+
+        viewModel.openReceipt(receipt)
+
+        guard case .openReceiptView(let openedReceipt)? = mockCoordinator.lastRoute else {
+            return XCTFail("Expected navigation to .openReceiptView")
+        }
+
+        XCTAssertEqual(openedReceipt, receipt)
+    }
+
     // MARK: Helper
 
     private func makeReceipt() -> Receipt {
