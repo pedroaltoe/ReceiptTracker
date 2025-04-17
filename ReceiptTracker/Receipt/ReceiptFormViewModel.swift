@@ -30,6 +30,7 @@ final class ReceiptFormViewModel {
         return true
     }
 
+    var isShowingCamera: Bool = false
     var isEditing: Bool = false
     var displayModel = ReceiptDisplayModel()
     var receipt: Receipt?
@@ -52,6 +53,10 @@ final class ReceiptFormViewModel {
     }
 
     // MARK: - Helpers
+
+    func handleImage(_ image: UIImage) {
+        displayModel.image = image
+    }
 
     func loadImage() async {
         guard let data = try? await selectedItem?.loadTransferable(type: Data.self),
