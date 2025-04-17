@@ -27,6 +27,11 @@ struct ReceiptFormView: View {
                 return makeErrorAlert()
             }
         }
+        .sheet(isPresented: $viewModel.isShowingCamera) {
+            CameraView { uiImage in
+                viewModel.handleImage(uiImage)
+            }
+        }
     }
 
     // MARK: - Image Picker
@@ -40,11 +45,9 @@ struct ReceiptFormView: View {
                     .cornerRadius(ReceiptForm.Image.cornerRadius)
             }
 
-            PhotosPicker(
-                Localized.ReceiptForm.photosPickerButtonTitle,
-                selection: $viewModel.selectedItem,
-                matching: .images
-            )
+            Button(Localized.ReceiptForm.takePhotoButtonTitle) {
+                viewModel.isShowingCamera = true
+            }
         }
         .accessibilityLabel(A11y.ReceiptForm.imagePicker)
         .accessibilityIdentifier("Image picker")
