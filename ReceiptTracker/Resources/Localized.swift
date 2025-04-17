@@ -17,10 +17,10 @@ enum Localized {
         static let currencySectionTitle = String(localized: "Currency")
         static let datePickerTitle = String(localized: "Date")
         static let dateSectionTitle = String(localized: "Date")
-        static let photosPickerButtonTitle = String(localized: "Select Image")
         static let photoSectionTitle = String(localized: "Receipt Photo")
         static let saveButton = String(localized: "Save")
         static let saveItemErrorMessage = String(localized: "Item couldn't be saved, please try again later.")
+        static let takePhotoButtonTitle = String(localized: "Take Photo")
 
         static func title(_ isEditing: Bool) -> String {
             isEditing ? "Edit Receipt" : "New Receipt"
